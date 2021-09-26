@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">IPTV Player</string>
+    <string name="returned_from_app_settings_to_activity">
+        Returned from app settings to MainActivity with the following permissions:
+        \n\nRead File: %s
+    </string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="file_permission_success">File permission success</string>
+    <string name="rationale_read_file">"You need to give permission to access files "</string>
+</resources>
