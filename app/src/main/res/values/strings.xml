@@ -8,4 +8,9 @@
     <string name="no">No</string>
     <string name="file_permission_success">File permission success</string>
     <string name="rationale_read_file">"You need to give permission to access files "</string>
+    <string name="file_select">Please select file</string>
+    <string name="select">Select</string>
+    <string name="file_location">file location......</string>
+    <string name="info_file_select">You can import the list by selecting the m3u file or the m3u8 file.</string>
+    <string name="mime_error">It only supports m3u files for now.</string>
 </resources>
