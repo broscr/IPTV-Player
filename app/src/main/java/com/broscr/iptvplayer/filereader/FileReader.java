@@ -30,7 +30,7 @@ public class FileReader {
     private final String HTTP = "http://";
     private final Uri fileName;
     private final List<Channel> channelList;
-    private Activity activity;
+    private final Activity activity;
 
     public FileReader(Activity activity, Uri fileName) {
         this.activity = activity;

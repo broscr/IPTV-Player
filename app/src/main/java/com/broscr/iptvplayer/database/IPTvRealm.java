@@ -3,9 +3,11 @@ package com.broscr.iptvplayer.database;
 import com.broscr.iptvplayer.models.Channel;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class IPTvRealm {
 
@@ -66,13 +68,23 @@ public class IPTvRealm {
         return channelList;
     }
 
-    /**
-     * will be wrote another time
-     * <p>
-     * public List<String> getCategoriesChannel(){
-     * }
-     * </p>
-     */
+    public List<String> getCategories() {
+        realm = ipTvListInstanceRealm();
+        realm.beginTransaction();
+        RealmResults<Channel> categoriesQ = realm.where(Channel.class)
+                .distinct("channelGroup").findAll();
+        realm.commitTransaction();
+        return categoriesQ.stream().distinct().map(Channel::getChannelGroup).collect(Collectors.toList());
+    }
+
+    public List<Channel> getCategoriesChannel(String category){
+        realm = ipTvListInstanceRealm();
+        realm.beginTransaction();
+        RealmResults<Channel> channels = realm.where(Channel.class)
+                .equalTo("channelGroup",category).findAll();
+        realm.commitTransaction();
+        return channels;
+    }
 
     public long allChannelCount() {
         realm = ipTvListInstanceRealm();

@@ -10,9 +10,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.broscr.iptvplayer.R;
 import com.broscr.iptvplayer.databinding.ActivityMainBinding;
-import com.broscr.iptvplayer.ui.fragments.AboutFragment;
-import com.broscr.iptvplayer.ui.fragments.FavoriteFragment;
-import com.broscr.iptvplayer.ui.fragments.HomeFragment;
+import com.broscr.iptvplayer.ui.fragments.about.AboutFragment;
+import com.broscr.iptvplayer.ui.fragments.favorite.FavoriteFragment;
+import com.broscr.iptvplayer.ui.fragments.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
