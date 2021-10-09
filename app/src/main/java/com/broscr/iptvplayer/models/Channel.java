@@ -2,12 +2,14 @@ package com.broscr.iptvplayer.models;
 
 import androidx.annotation.NonNull;
 
-public class Channel {
+import io.realm.RealmObject;
+
+public class Channel extends RealmObject {
 
     private String channelName;
     private String channelUrl;
     private String channelImg;
-
+    private String channelGroup;
 
     public Channel() {
     }
@@ -36,13 +38,22 @@ public class Channel {
         this.channelImg = channelImg;
     }
 
+    public String getChannelGroup() {
+        return channelGroup;
+    }
+
+    public void setChannelGroup(String channelGroup) {
+        this.channelGroup = channelGroup;
+    }
+
     @NonNull
     @Override
     public String toString() {
         return "Channel{" +
-                "channelName='" + channelName + '\'' +
+                ", channelName='" + channelName + '\'' +
                 ", channelUrl='" + channelUrl + '\'' +
                 ", channelImg='" + channelImg + '\'' +
+                ", channelGroup='" + channelGroup + '\'' +
                 '}';
     }
 }

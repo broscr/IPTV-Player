@@ -1,26 +1,110 @@
 package com.broscr.iptvplayer.filereader;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
+import com.broscr.iptvplayer.R;
+import com.broscr.iptvplayer.database.IPTvRealm;
+import com.broscr.iptvplayer.models.Channel;
+import com.broscr.iptvplayer.ui.activitys.MainActivity;
+import com.broscr.iptvplayer.utils.Helper;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import timber.log.Timber;
 
 public class FileReader {
+    private final String EXT_M3U = "#EXTM3U";
+    private final String EXT_INF_SP = "#EXTINF:-1";
+    private final String TVG_NAME = "tvg-name=";
+    private final String TVG_LOGO = "tvg-logo=";
+    private final String GROUP_TITLE = "group-title=";
+    private final String WHITE_SPACE = " ";
+    private final String COMMA = ",";
+    private final String HTTP = "http://";
 
-    //#EXTM3U
-//#EXTINF:-1 tvg-id="" tvg-name="===((  TR SPOR  ))===" tvg-logo="" group-title="TR SPOR",===((  TR SPOR  ))===
-// http://custom.url/username/password/23640
-//#EXTINF:-1 tvg-id="" tvg-name="Bein sport  HD" tvg-logo="http://customurl/images/95235e9c030dde800eaa38740e09457a.png"
-// group-title="TR SPOR",Bein sport  HD
-// http://customurl/username/password/23679
-//#EXTINF:-1 tvg-id="tr.TR| BEIN SPORT 1 HD" tvg-name="Bein sport HD +" tvg-logo="http://customurl/images/95235e9c030dde800eaa38740e09457a.png"
-// group-title="TR SPOR",Bein sport HD +
-    private Context context;
-    private String fileName;
+    private final Context context;
+    private final Uri fileName;
+    private final List<Channel> channelList;
 
-    public FileReader(Context context, String fileName) {
+    public FileReader(Context context, Uri fileName) {
         this.context = context;
         this.fileName = fileName;
+        this.channelList = new ArrayList<>();
     }
 
     public void readFile() {
+        try {
+            InputStream inputStreamReader = context.getContentResolver().openInputStream(fileName);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamReader));
 
+            String currentLine;
+            StringBuilder allText = new StringBuilder();
+            while ((currentLine = bufferedReader.readLine()) != null) {
+                allText.append(currentLine).append("\n");
+            }
+
+            fileSplitter(allText.toString());
+
+        } catch (IOException e) {
+            Timber.e(e);
+            Helper.showToast(context, e.getLocalizedMessage());
+        }
+    }
+
+    private void fileSplitter(String fileText) {
+
+        String[] fileLines = fileText.replaceAll("\n", " ").split(EXT_M3U)[1].split(EXT_INF_SP);
+
+        try {
+            for (String line : fileLines) {
+                if (!line.equals(WHITE_SPACE)) {
+
+                    String tvgName = line.split(TVG_NAME)[1].split(TVG_LOGO)[0];
+                    String tvgLogo = line.split(TVG_LOGO)[1].split(GROUP_TITLE)[0];
+                    String groupTitle = line.split(GROUP_TITLE)[1].split(COMMA)[0];
+
+                    if (line.split(COMMA)[1].split(HTTP).length > 1) {
+                        String url = line.split(COMMA)[1].split(HTTP)[1];
+
+                        if (!tvgName.contains("===")) {
+
+                            Channel channel = new Channel();
+                            channel.setChannelName(tvgName.replaceAll("\"", ""));
+                            channel.setChannelGroup(groupTitle.replaceAll("\"", ""));
+                            channel.setChannelImg(tvgLogo.replaceAll("\"", ""));
+                            channel.setChannelUrl((HTTP + url).replaceAll("\"", ""));
+                            channelList.add(channel);
+                        }
+                    }
+
+                }
+            }
+
+            if (channelList.size() > 0) {
+
+                if (new IPTvRealm().channelListSave(channelList)) {
+                    context.startActivity(new Intent(context, MainActivity.class));
+                } else {
+                    Helper.showToast(context, context.getString(R.string.error_save_list));
+                }
+
+                Helper.showToast(context, context.getString(R.string.success_file_read));
+
+            } else {
+                Helper.showToast(context, context.getString(R.string.error_file_read_exp));
+            }
+
+        } catch (Exception e) {
+            Timber.e(e);
+            Helper.showToast(context, String.format(e.getMessage() != null ?
+                    e.getMessage() : e.toString(), context.getString(R.string.error_file_read)));
+        }
     }
 }

@@ -11,6 +11,13 @@
     <string name="file_select">Please select file</string>
     <string name="select">Select</string>
     <string name="file_location">file location......</string>
-    <string name="info_file_select">You can import the list by selecting the m3u file or the m3u8 file.</string>
+    <string name="info_file_select">You can import the list by selecting the m3u file.</string>
+    <string name="success_file_read">File read successfully</string>
+    <string name="count_save_list">count %d</string>
+    <!--ERRORS-->
     <string name="mime_error">It only supports m3u files for now.</string>
+    <string name="error_file_read">file read error: %d</string>
+    <string name="error_file_read_exp">File read error please check m3u file</string>
+    <string name="error_save_list">Error writing list to local</string>
+    <!--ERRORS-->
 </resources>
