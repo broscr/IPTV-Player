@@ -1,6 +1,6 @@
 package com.broscr.iptvplayer.filereader;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -28,20 +28,19 @@ public class FileReader {
     private final String WHITE_SPACE = " ";
     private final String COMMA = ",";
     private final String HTTP = "http://";
-
-    private final Context context;
     private final Uri fileName;
     private final List<Channel> channelList;
+    private Activity activity;
 
-    public FileReader(Context context, Uri fileName) {
-        this.context = context;
+    public FileReader(Activity activity, Uri fileName) {
+        this.activity = activity;
         this.fileName = fileName;
         this.channelList = new ArrayList<>();
     }
 
     public void readFile() {
         try {
-            InputStream inputStreamReader = context.getContentResolver().openInputStream(fileName);
+            InputStream inputStreamReader = activity.getContentResolver().openInputStream(fileName);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamReader));
 
             String currentLine;
@@ -54,7 +53,7 @@ public class FileReader {
 
         } catch (IOException e) {
             Timber.e(e);
-            Helper.showToast(context, e.getLocalizedMessage());
+            Helper.showToast(activity, e.getLocalizedMessage());
         }
     }
 
@@ -90,21 +89,22 @@ public class FileReader {
             if (channelList.size() > 0) {
 
                 if (new IPTvRealm().channelListSave(channelList)) {
-                    context.startActivity(new Intent(context, MainActivity.class));
+                    activity.startActivity(new Intent(activity, MainActivity.class));
+                    activity.finish();
                 } else {
-                    Helper.showToast(context, context.getString(R.string.error_save_list));
+                    Helper.showToast(activity, activity.getString(R.string.error_save_list));
                 }
 
-                Helper.showToast(context, context.getString(R.string.success_file_read));
+                Helper.showToast(activity, activity.getString(R.string.success_file_read));
 
             } else {
-                Helper.showToast(context, context.getString(R.string.error_file_read_exp));
+                Helper.showToast(activity, activity.getString(R.string.error_file_read_exp));
             }
 
         } catch (Exception e) {
             Timber.e(e);
-            Helper.showToast(context, String.format(e.getMessage() != null ?
-                    e.getMessage() : e.toString(), context.getString(R.string.error_file_read)));
+            Helper.showToast(activity, String.format(e.getMessage() != null ?
+                    e.getMessage() : e.toString(), activity.getString(R.string.error_file_read)));
         }
     }
 }

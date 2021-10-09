@@ -1,8 +1,9 @@
-# IPTV Player Free.....
+# IPTV Player.....
 
-For now it can only read m3u files. m3u file read and playing..
+Not completed just now developing.....
+* For now it can only read m3u files.
 
-# Supported file format
+## Supported file format
 
 >#EXTM3U\
 >#EXTINF:-1 tvg-id="" tvg-name="===((  TR SPOR  ))===" tvg-logo="" group-title="TR SPOR",===((  TR SPOR  ))===\
@@ -24,7 +25,7 @@ For now it can only read m3u files. m3u file read and playing..
 >#EXTINF:-1 tvg-id="" tvg-name="TR: CHANNEL NAME" tvg-logo="" group-title="TR  YEREL",TR: CHANNEL NAME\
 >http://server_url/username/password/37731\
 
-# Road Map....
+## Road Map....
 * Categories system.
 * Search system.
 * Favorite system.

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.broscr.iptvplayer.R;
+import com.broscr.iptvplayer.database.IPTvRealm;
 import com.broscr.iptvplayer.databinding.ActivityFirstBinding;
 import com.broscr.iptvplayer.filereader.FileReader;
 import com.broscr.iptvplayer.utils.Helper;
@@ -23,7 +24,7 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
-public class FirstActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,
+public class FileSelectActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,
         EasyPermissions.RationaleCallbacks, View.OnClickListener {
 
     private static final int IPTV_READ_DOC_PERM = 123;
@@ -41,23 +42,29 @@ public class FirstActivity extends AppCompatActivity implements EasyPermissions.
     }
 
     private void initialize() {
-        binding.selectBtn.setOnClickListener(this);
-        selectFileLauncher = registerForActivityResult(
-                new ActivityResultContracts.GetContent(),
-                result -> {
-                    if (result != null) {
-                        Timber.e("Result %s", result);
-                        //Result uri file
-                        new FileReader(FirstActivity.this, result).readFile();
-                    } else {
-                        Timber.e("Nothing Select");
-                    }
-                });
+        if (new IPTvRealm().allChannelCount() > 0) {
+            startActivity(new Intent(FileSelectActivity.this, MainActivity.class));
+            finish();
+        } else {
+            binding.selectActLinear.setVisibility(View.VISIBLE);
+            binding.selectBtn.setOnClickListener(this);
+            selectFileLauncher = registerForActivityResult(
+                    new ActivityResultContracts.GetContent(),
+                    result -> {
+                        if (result != null) {
+                            Timber.e("Result %s", result);
+                            //Result uri file
+                            new FileReader(FileSelectActivity.this, result).readFile();
+                        } else {
+                            Timber.e("Nothing Select");
+                        }
+                    });
+        }
     }
 
 
     private boolean hasReadFilePermission() {
-        return EasyPermissions.hasPermissions(FirstActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        return EasyPermissions.hasPermissions(FileSelectActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     @AfterPermissionGranted(IPTV_READ_DOC_PERM)
@@ -67,7 +74,7 @@ public class FirstActivity extends AppCompatActivity implements EasyPermissions.
             selectFileLauncher.launch(Helper.FILE_MIME_TYPE);
         } else {
             EasyPermissions.requestPermissions(
-                    FirstActivity.this,
+                    FileSelectActivity.this,
                     getString(R.string.rationale_read_file),
                     IPTV_READ_DOC_PERM,
                     Manifest.permission.READ_EXTERNAL_STORAGE);

@@ -1,14 +1,22 @@
 package com.broscr.iptvplayer.ui.activitys;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.broscr.iptvplayer.R;
-import com.broscr.iptvplayer.database.IPTvRealm;
 import com.broscr.iptvplayer.databinding.ActivityMainBinding;
+import com.broscr.iptvplayer.ui.fragments.AboutFragment;
+import com.broscr.iptvplayer.ui.fragments.FavoriteFragment;
+import com.broscr.iptvplayer.ui.fragments.HomeFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
     private ActivityMainBinding binding;
 
@@ -22,8 +30,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        IPTvRealm ipTvRealm = new IPTvRealm();
+        BottomNavigationView bottomNavigationView = binding.bottomNavigationView;
+        openFragment(HomeFragment.newInstance());
+        bottomNavigationView.setOnItemSelectedListener(this);
+    }
 
-        binding.countTest.setText(String.format(getString(R.string.count_save_list), ipTvRealm.allChannelCount()));
+    private void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(binding.bottomFrameLayout.getId(), fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.mainMenu) {
+            openFragment(HomeFragment.newInstance());
+            return true;
+        } else if (item.getItemId() == R.id.favoriteMenu) {
+            openFragment(FavoriteFragment.newInstance());
+            return true;
+        } else if (item.getItemId() == R.id.aboutMenu) {
+            openFragment(AboutFragment.newInstance());
+            return true;
+        }
+
+        return false;
     }
 }
