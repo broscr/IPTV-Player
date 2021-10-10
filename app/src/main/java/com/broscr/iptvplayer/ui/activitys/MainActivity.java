@@ -12,7 +12,7 @@ import com.broscr.iptvplayer.R;
 import com.broscr.iptvplayer.databinding.ActivityMainBinding;
 import com.broscr.iptvplayer.ui.fragments.about.AboutFragment;
 import com.broscr.iptvplayer.ui.fragments.favorite.FavoriteFragment;
-import com.broscr.iptvplayer.ui.fragments.home.HomeFragment;
+import com.broscr.iptvplayer.ui.fragments.home.CategoriesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void initialize() {
         BottomNavigationView bottomNavigationView = binding.bottomNavigationView;
-        openFragment(HomeFragment.newInstance());
+        openFragment(CategoriesFragment.newInstance());
         bottomNavigationView.setOnItemSelectedListener(this);
     }
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.mainMenu) {
-            openFragment(HomeFragment.newInstance());
+            openFragment(CategoriesFragment.newInstance());
             return true;
         } else if (item.getItemId() == R.id.favoriteMenu) {
             openFragment(FavoriteFragment.newInstance());

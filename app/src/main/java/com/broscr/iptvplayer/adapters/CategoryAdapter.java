@@ -51,7 +51,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     class CategoryVHolder extends RecyclerView.ViewHolder {
 
-        private CategoriesRowBinding binding;
+        private final CategoriesRowBinding binding;
 
         public CategoryVHolder(@NonNull CategoriesRowBinding itemView) {
             super(itemView.getRoot());

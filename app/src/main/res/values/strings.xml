@@ -24,5 +24,6 @@
     <string name="about_page_title">About us</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="category">Categories</string>
     <!--ERRORS-->
 </resources>
