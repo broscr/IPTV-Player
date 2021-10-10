@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPTVPlayer">
         <activity
+            android:name=".ui.activitys.channels.ChannelActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.activitys.FileSelectActivity"
             android:exported="true">
             <intent-filter>

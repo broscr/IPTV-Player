@@ -1,6 +1,7 @@
 package com.broscr.iptvplayer.ui.fragments.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.broscr.iptvplayer.adapters.CategoryAdapter;
 import com.broscr.iptvplayer.databinding.FragmentCategoriesBinding;
+import com.broscr.iptvplayer.ui.activitys.channels.ChannelActivity;
 import com.broscr.iptvplayer.utils.CategoryOnClick;
-
-import timber.log.Timber;
+import com.broscr.iptvplayer.utils.Helper;
 
 public class CategoriesFragment extends Fragment {
 
@@ -23,7 +24,9 @@ public class CategoriesFragment extends Fragment {
     private FragmentCategoriesBinding binding;
     private Context context;
     private final CategoryOnClick categoryOnClick = category -> {
-        Timber.e("ClickCat: %s", category);
+        Intent intent = new Intent(context, ChannelActivity.class);
+        intent.putExtra(Helper.CATEGORY, category);
+        context.startActivity(intent);
     };
 
     public CategoriesFragment() {
@@ -59,5 +62,13 @@ public class CategoriesFragment extends Fragment {
             binding.recyclerCategories
                     .setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (binding != null) {
+            binding = null;
+        }
     }
 }

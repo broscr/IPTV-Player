@@ -35,4 +35,11 @@ public class AboutFragment extends Fragment {
     private void initialize() {
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (binding != null) {
+            binding = null;
+        }
+    }
 }
