@@ -1,8 +1,14 @@
 package com.broscr.iptvplayer.ui.activitys.player;
 
+import static com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_FILL;
+
 import android.content.Intent;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.OrientationEventListener;
+import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +28,7 @@ import com.google.android.exoplayer2.util.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class PlayerActivity extends AppCompatActivity {
 
@@ -42,7 +49,6 @@ public class PlayerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityPlayerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -69,6 +75,16 @@ public class PlayerActivity extends AppCompatActivity {
             clearStartPosition();
         }
 
+        new OrientationEventListener(PlayerActivity.this, SensorManager.SENSOR_DELAY_UI) {
+            @Override
+            public void onOrientationChanged(int i) {
+                if (i == 90 || i == 270) {
+                    hideSystemUi();
+                    binding.playerView.setResizeMode(RESIZE_MODE_FILL);
+                }
+            }
+        }.enable();
+
     }
 
     private void initializePlayer() {
@@ -78,7 +94,6 @@ public class PlayerActivity extends AppCompatActivity {
             Intent intent = getIntent();
 
             mediaItems = createMediaItems(intent);
-
             player =
                     new SimpleExoPlayer.Builder(this)
                             .build();
@@ -93,8 +108,10 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         player.setMediaItems(mediaItems, !haveStartPosition);
+        player.seekTo(channelPosition(), C.INDEX_UNSET);
         player.prepare();
         player.setPlayWhenReady(true);
+
     }
 
     protected void releasePlayer() {
@@ -184,16 +201,19 @@ public class PlayerActivity extends AppCompatActivity {
         channelList = new IPTvRealm().getCategoriesChannel(channel.getChannelGroup());
         List<MediaItem> mediaItems = new ArrayList<>();
 
-//        mediaItems.add(setMediaItem(channel));
-
         for (Channel ch : channelList) {
             mediaItems.add(setMediaItem(ch));
         }
         return mediaItems;
     }
 
+    private int channelPosition() {
+        return IntStream.range(0, channelList.size()).filter(i -> channelList.get(i).getChannelName()
+                .equals(channel.getChannelName())).findFirst().getAsInt();
+    }
+
     private MediaItem setMediaItem(Channel ch) {
-        MediaItem mediaItem = new MediaItem.Builder()
+        return new MediaItem.Builder()
                 .setUri(ch.getChannelUrl())
                 .setTag(ch.getChannelName())
                 .setMediaMetadata(new MediaMetadata.Builder()
@@ -202,7 +222,19 @@ public class PlayerActivity extends AppCompatActivity {
                         .setArtworkUri(Uri.parse(ch.getChannelImg()))
                         .setArtist(ch.getChannelGroup()).build())
                 .build();
-        return mediaItem;
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUi();
+        }
+    }
+
+    private void hideSystemUi() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
 }

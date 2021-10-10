@@ -26,7 +26,7 @@ Not completed just now developing.....
 >http://server_url/username/password/37731\
 
 ## Road Map....
-* Categories system.
+* ~~Categories system.~~ :thumbsup:
 * Search system.
 * Favorite system.
 
