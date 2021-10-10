@@ -30,4 +30,11 @@ Not completed just now developing.....
 * Search system.
 * Favorite system.
 
+## Tech
+IPTV Player uses a number of open source projects to work properly:
+* [EXOPLAYER](https://github.com/google/ExoPlayer)
+* [EASYPERMISSON](https://github.com/googlesamples/easypermissions)
+* [TIMBER](https://github.com/JakeWharton/timber)
+
+
 [LISENCE](https://github.com/broscr/IPTV-Player/blob/master/LICENSE)

@@ -1,5 +1,6 @@
 package com.broscr.iptvplayer.ui.activitys.channels;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.broscr.iptvplayer.adapters.ChannelListAdapter;
 import com.broscr.iptvplayer.databinding.ActivityChannelBinding;
+import com.broscr.iptvplayer.ui.activitys.player.PlayerActivity;
 import com.broscr.iptvplayer.utils.ChannelOnClick;
 import com.broscr.iptvplayer.utils.Helper;
 
@@ -19,7 +21,9 @@ public class ChannelActivity extends AppCompatActivity {
     private ChannelViewModel channelViewModel;
     private String category;
     private final ChannelOnClick channelOnClick = channel -> {
-
+        Intent intent = new Intent(ChannelActivity.this, PlayerActivity.class);
+        intent.putExtra(Helper.CHANNEL, channel);
+        startActivity(intent);
     };
 
     @Override

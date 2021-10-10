@@ -1,4 +1,4 @@
-package com.broscr.iptvplayer.ui.activitys;
+package com.broscr.iptvplayer.ui.activitys.fileselect;
 
 import android.Manifest;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import com.broscr.iptvplayer.R;
 import com.broscr.iptvplayer.database.IPTvRealm;
 import com.broscr.iptvplayer.databinding.ActivityFirstBinding;
 import com.broscr.iptvplayer.filereader.FileReader;
+import com.broscr.iptvplayer.ui.activitys.main.MainActivity;
 import com.broscr.iptvplayer.utils.Helper;
 
 import java.util.List;

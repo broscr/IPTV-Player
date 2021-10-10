@@ -7,7 +7,7 @@ import android.net.Uri;
 import com.broscr.iptvplayer.R;
 import com.broscr.iptvplayer.database.IPTvRealm;
 import com.broscr.iptvplayer.models.Channel;
-import com.broscr.iptvplayer.ui.activitys.MainActivity;
+import com.broscr.iptvplayer.ui.activitys.main.MainActivity;
 import com.broscr.iptvplayer.utils.Helper;
 
 import java.io.BufferedReader;

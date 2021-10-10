@@ -1,4 +1,4 @@
-package com.broscr.iptvplayer.ui.activitys;
+package com.broscr.iptvplayer.ui.activitys.main;
 
 import android.os.Bundle;
 import android.view.MenuItem;
