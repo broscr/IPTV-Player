@@ -5,11 +5,14 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.broscr.iptvplayer.R;
 import com.broscr.iptvplayer.databinding.ChannelListRowBinding;
 import com.broscr.iptvplayer.models.Channel;
 import com.broscr.iptvplayer.utils.ChannelOnClick;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -38,6 +41,16 @@ public class ChannelListAdapter extends RecyclerView.Adapter<ChannelListAdapter.
         if (channel != null) {
             holder.binding.channelListRowId.setText(String.valueOf(position + 1));
             holder.binding.channelListRowName.setText(channel.getChannelName());
+
+            if (channel.getChannelImg() != null && !channel.getChannelImg().equals("")) {
+                Glide.with(context).load(channel.getChannelImg())
+                        .override(60, 60)
+                        .into(holder.binding.channelListRowImg);
+            } else {
+                holder.binding.channelListRowImg
+                        .setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),
+                                R.drawable.ic_image, null));
+            }
             holder.binder(channelOnClick, channel);
         }
     }

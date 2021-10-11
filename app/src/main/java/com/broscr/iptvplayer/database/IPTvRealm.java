@@ -5,6 +5,7 @@ import com.broscr.iptvplayer.models.Channel;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -77,11 +78,22 @@ public class IPTvRealm {
         return categoriesQ.stream().distinct().map(Channel::getChannelGroup).collect(Collectors.toList());
     }
 
-    public List<Channel> getCategoriesChannel(String category){
+    public List<Channel> getCategoriesChannel(String category) {
         realm = ipTvListInstanceRealm();
         realm.beginTransaction();
         RealmResults<Channel> channels = realm.where(Channel.class)
-                .equalTo("channelGroup",category).findAll();
+                .equalTo("channelGroup", category).findAll();
+        realm.commitTransaction();
+        return channels;
+    }
+
+    public List<Channel> searchChannel(String searchKey) {
+        realm = ipTvListInstanceRealm();
+        realm.beginTransaction();
+        RealmResults<Channel> channels = realm.where(Channel.class)
+                .contains("channelName", searchKey, Case.INSENSITIVE)
+                .limit(5)
+                .findAll();
         realm.commitTransaction();
         return channels;
     }
