@@ -31,6 +31,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
     private ActivityMainBinding binding;
+    private IPTvRealm ipTvRealm;
+
     private final ChannelOnClick channelOnClick = channel -> {
         Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
         intent.putExtra(Helper.CHANNEL, channel);
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private void initialize() {
+        ipTvRealm = new IPTvRealm();
+        binding.mainChannelSize.setText(String.format(getString(R.string.channel_count), ipTvRealm.allChannelCount()));
         BottomNavigationView bottomNavigationView = binding.bottomNavigationView;
         openFragment(CategoriesFragment.newInstance());
         bottomNavigationView.setOnItemSelectedListener(this);
@@ -71,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private void searchSet(String searchKey) {
-        IPTvRealm ipTvRealm = new IPTvRealm();
         List<Channel> channels = ipTvRealm.searchChannel(searchKey);
         if (channels != null && channels.size() > 0) {
             binding.searchRecycler

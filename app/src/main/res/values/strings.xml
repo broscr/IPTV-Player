@@ -21,6 +21,7 @@
     <string name="about_page_title">About us</string>
     <string name="search_title">Search channel</string>
     <string name="search_hint">Search channel</string>
+    <string name="channel_count">Channel Count: %d</string>
     <!--ERRORS-->
     <string name="mime_error">It only supports m3u files for now.</string>
     <string name="error_file_read">file read error: %d</string>
