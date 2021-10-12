@@ -1,12 +1,8 @@
 package com.broscr.iptvplayer.ui.activitys.player;
 
-import static com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_FILL;
-
 import android.content.Intent;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -94,16 +90,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         } else {
             clearStartPosition();
         }
-
-        new OrientationEventListener(PlayerActivity.this, SensorManager.SENSOR_DELAY_UI) {
-            @Override
-            public void onOrientationChanged(int i) {
-                if (i == 90 || i == 270) {
-                    hideSystemUi();
-                    binding.playerView.setResizeMode(RESIZE_MODE_FILL);
-                }
-            }
-        }.enable();
 
     }
 
