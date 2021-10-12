@@ -43,12 +43,15 @@ public class ChannelActivity extends AppCompatActivity {
 
     private void initialize() {
         Helper.getToolbarStyle(this, binding.channelListToolbar, category);
+        setFavoriteData();
+    }
+
+    private void setFavoriteData() {
         channelViewModel.getChannelLiveData().observe(this, channelList -> {
             binding.channelRecycler.setAdapter(new ChannelListAdapter(ChannelActivity.this, channelList, channelOnClick));
             binding.channelRecycler.setLayoutManager(new LinearLayoutManager(ChannelActivity.this));
         });
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

@@ -27,8 +27,9 @@ Not completed just now developing.....
 
 ## Road Map....
 * ~~Categories system.~~ :thumbsup:
-* Search system.
-* Favorite system.
+* ~~Search system.~~ :thumbsup:
+* ~~Favorite system.~~ :thumbsup:
+* Details
 
 ## Tech
 IPTV Player uses a number of open source projects to work properly:

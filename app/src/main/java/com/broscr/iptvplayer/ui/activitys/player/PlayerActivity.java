@@ -17,11 +17,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.broscr.iptvplayer.R;
 import com.broscr.iptvplayer.database.IPTvRealm;
 import com.broscr.iptvplayer.databinding.ActivityPlayerBinding;
 import com.broscr.iptvplayer.models.Channel;
+import com.broscr.iptvplayer.ui.fragments.favorite.FavoriteViewModel;
 import com.broscr.iptvplayer.utils.Helper;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
@@ -55,10 +57,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private ImageView favoriteBtn;
     private IPTvRealm ipTvRealm;
     private TextView titleText;
+    private FavoriteViewModel favoriteViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        favoriteViewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
+
         binding = ActivityPlayerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -130,6 +135,14 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    private void checkFavorite(String name) {
+        if (ipTvRealm.isFavorite(name)) {
+            favoriteBtn.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_favorite, null));
+        } else {
+            favoriteBtn.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_favorite_null, null));
+        }
+    }
+
     protected void releasePlayer() {
         if (player != null) {
             updateStartPosition();
@@ -158,6 +171,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         if (mediaItem != null) {
             assert mediaItem.mediaMetadata.title != null;
             titleText.setText(mediaItem.mediaMetadata.title.toString());
+            checkFavorite(mediaItem.mediaMetadata.title.toString());
         }
     }
 
@@ -217,6 +231,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
+        finish();
     }
 
     private List<MediaItem> createMediaItems(Intent intent) {
@@ -263,8 +278,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == favoriteLayout.getId() && player != null) {
-            Channel channel = channelList.get(player.getCurrentWindowIndex());
+        if (view.getId() == favoriteLayout.getId() && player != null && player.getCurrentMediaItem() != null) {
+            Channel channel = channelList.stream().filter(i -> i.getChannelName()
+                    .equals(player.getCurrentMediaItem().mediaMetadata.title.toString())).findFirst().get();
             if (ipTvRealm.isFavorite(channel.getChannelName())) {
                 ipTvRealm.deleteFavorite(channel);
                 favoriteBtn.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
@@ -274,6 +290,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 favoriteBtn.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
                         R.drawable.ic_favorite, null));
             }
+
+            favoriteViewModel.updateFavorite();
         }
     }
 }

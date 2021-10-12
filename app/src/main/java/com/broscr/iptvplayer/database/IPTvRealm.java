@@ -131,8 +131,8 @@ public class IPTvRealm {
     public boolean deleteFavorite(Channel channel) {
         realm = ipTvFavoriteInstanceRealm();
         realm.beginTransaction();
-        boolean result = realm.where(Channel.class).equalTo("channelName", channel.getChannelName()).findAll()
-                .deleteAllFromRealm();
+        boolean result = realm.where(Channel.class).equalTo("channelName", channel.getChannelName())
+                .findAll().deleteFirstFromRealm();
         realm.commitTransaction();
         return result;
     }
