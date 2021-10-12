@@ -1,6 +1,5 @@
 # IPTV Player.....
 
-Not completed just now developing.....
 * For now it can only read m3u files.
 
 ### Screen
