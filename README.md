@@ -8,6 +8,8 @@ Not completed just now developing.....
 <img src="https://github.com/broscr/IPTV-Player/blob/master/Screenshot_1634029884.png" alt="channels" width="200"/>     <img src="https://github.com/broscr/IPTV-Player/blob/master/Screenshot_1634031038.png" alt="playerh" width="200"/>
 <img src="https://github.com/broscr/IPTV-Player/blob/master/Screenshot_1634033511.png" alt="favorite" width="200"/>     <img src="https://github.com/broscr/IPTV-Player/blob/master/Screenshot_1634031049.png" alt="playerv" width="400"/>
 
+[Test APK](https://github.com/broscr/IPTV-Player/blob/master/app/release/)
+
 ## Supported file format
 
 >#EXTM3U\
