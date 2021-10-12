@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.broscr.iptvplayer.utils.Helper;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
@@ -34,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayerActivity extends AppCompatActivity implements View.OnClickListener, Player.Listener {
 
     private static final String KEY_WINDOW = "window";
     private static final String KEY_POSITION = "position";
@@ -52,6 +54,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private FrameLayout favoriteLayout;
     private ImageView favoriteBtn;
     private IPTvRealm ipTvRealm;
+    private TextView titleText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         playerView = binding.playerView;
         favoriteBtn = playerView.findViewById(R.id.exo_favorite_icon);
         favoriteLayout = playerView.findViewById(R.id.exo_favorite_button);
+        titleText = playerView.findViewById(R.id.exo_item_title);
         favoriteLayout.setOnClickListener(this);
 
         if (savedInstanceState != null) {
@@ -118,6 +122,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             player.seekTo(startWindow, startPosition);
         }
 
+        player.addListener(this);
         player.setMediaItems(mediaItems, !haveStartPosition);
         player.seekTo(channelPosition(), C.INDEX_UNSET);
         player.prepare();
@@ -148,6 +153,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         startPosition = C.TIME_UNSET;
     }
 
+    @Override
+    public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
+        if (mediaItem != null) {
+            assert mediaItem.mediaMetadata.title != null;
+            titleText.setText(mediaItem.mediaMetadata.title.toString());
+        }
+    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
