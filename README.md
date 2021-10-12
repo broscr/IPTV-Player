@@ -40,6 +40,7 @@ Not completed just now developing.....
 
 ## Tech
 IPTV Player uses a number of open source projects to work properly:
+* [REALM ANDROID](https://github.com/realm/realm-java)
 * [EXOPLAYER](https://github.com/google/ExoPlayer)
 * [EASYPERMISSON](https://github.com/googlesamples/easypermissions)
 * [TIMBER](https://github.com/JakeWharton/timber)
