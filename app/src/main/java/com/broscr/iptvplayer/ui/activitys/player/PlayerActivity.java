@@ -9,11 +9,15 @@ import android.os.Bundle;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.broscr.iptvplayer.R;
 import com.broscr.iptvplayer.database.IPTvRealm;
 import com.broscr.iptvplayer.databinding.ActivityPlayerBinding;
 import com.broscr.iptvplayer.models.Channel;
@@ -22,7 +26,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
@@ -30,12 +34,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class PlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String KEY_WINDOW = "window";
     private static final String KEY_POSITION = "position";
     private static final String KEY_AUTO_PLAY = "auto_play";
-    protected StyledPlayerView playerView;
+    protected PlayerView playerView;
     protected @Nullable
     SimpleExoPlayer player;
     private boolean startAutoPlay;
@@ -45,6 +49,9 @@ public class PlayerActivity extends AppCompatActivity {
     private Channel channel;
     private List<Channel> channelList;
     private List<MediaItem> mediaItems;
+    private FrameLayout favoriteLayout;
+    private ImageView favoriteBtn;
+    private IPTvRealm ipTvRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +72,11 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void initialize(Bundle savedInstanceState) {
+        ipTvRealm = new IPTvRealm();
         playerView = binding.playerView;
+        favoriteBtn = playerView.findViewById(R.id.exo_favorite_icon);
+        favoriteLayout = playerView.findViewById(R.id.exo_favorite_button);
+        favoriteLayout.setOnClickListener(this);
 
         if (savedInstanceState != null) {
             startAutoPlay = savedInstanceState.getBoolean(KEY_AUTO_PLAY);
@@ -236,5 +247,21 @@ public class PlayerActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == favoriteLayout.getId() && player != null) {
+            Channel channel = channelList.get(player.getCurrentWindowIndex());
+            if (ipTvRealm.isFavorite(channel.getChannelName())) {
+                ipTvRealm.deleteFavorite(channel);
+                favoriteBtn.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
+                        R.drawable.ic_favorite_null, null));
+            } else {
+                ipTvRealm.setFavorite(channel);
+                favoriteBtn.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
+                        R.drawable.ic_favorite, null));
+            }
+        }
     }
 }

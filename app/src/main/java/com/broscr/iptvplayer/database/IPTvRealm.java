@@ -105,5 +105,44 @@ public class IPTvRealm {
         realm.commitTransaction();
         return count;
     }
+
+    /***@implNote Favorite System*/
+    public boolean isFavorite(String channelName) {
+        realm = ipTvFavoriteInstanceRealm();
+        realm.beginTransaction();
+        Channel result = realm.where(Channel.class).equalTo("channelName", channelName)
+                .findFirst();
+        realm.commitTransaction();
+        return result != null;
+    }
+
+    public boolean setFavorite(Channel chl) {
+        realm = ipTvFavoriteInstanceRealm();
+        realm.beginTransaction();
+        Channel channel = realm.createObject(Channel.class);
+        channel.setChannelName(chl.getChannelName());
+        channel.setChannelImg(chl.getChannelImg());
+        channel.setChannelUrl(chl.getChannelUrl());
+        channel.setChannelGroup(chl.getChannelGroup());
+        realm.commitTransaction();
+        return true;
+    }
+
+    public boolean deleteFavorite(Channel channel) {
+        realm = ipTvFavoriteInstanceRealm();
+        realm.beginTransaction();
+        boolean result = realm.where(Channel.class).equalTo("channelName", channel.getChannelName()).findAll()
+                .deleteAllFromRealm();
+        realm.commitTransaction();
+        return result;
+    }
+
+    public List<Channel> getFavoriteList() {
+        realm = ipTvFavoriteInstanceRealm();
+        realm.beginTransaction();
+        RealmResults<Channel> channel = realm.where(Channel.class).findAll();
+        realm.commitTransaction();
+        return channel;
+    }
 }
 

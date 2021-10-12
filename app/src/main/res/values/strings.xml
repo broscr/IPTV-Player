@@ -27,5 +27,9 @@
     <string name="error_file_read">file read error: %d</string>
     <string name="error_file_read_exp">File read error please check m3u file</string>
     <string name="error_save_list">Error writing list to local</string>
+    <string name="play">play</string>
+    <string name="pause">pause</string>
+    <string name="previous">previous</string>
+    <string name="next">next</string>
     <!--ERRORS-->
 </resources>
