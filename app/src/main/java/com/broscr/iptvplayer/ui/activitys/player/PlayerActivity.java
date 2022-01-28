@@ -26,6 +26,7 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.util.Util;
 
@@ -100,8 +101,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             Intent intent = getIntent();
 
             mediaItems = createMediaItems(intent);
+
+            DefaultTrackSelector defaultTrackSelector = new DefaultTrackSelector(PlayerActivity.this);
+            defaultTrackSelector.setParameters(defaultTrackSelector.buildUponParameters().setMaxVideoSize(200, 200));
+
             player =
                     new SimpleExoPlayer.Builder(this)
+                            .setTrackSelector(defaultTrackSelector)
                             .build();
             player.setPlayWhenReady(startAutoPlay);
             playerView.setPlayer(player);
@@ -240,6 +246,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         return new MediaItem.Builder()
                 .setUri(ch.getChannelUrl())
                 .setTag(ch.getChannelName())
+                .setDrmLicenseUri(ch.getChannelDrmKey())
+                .setDrmUuid(Util.getDrmUuid(C.WIDEVINE_UUID.toString()))
                 .setMediaMetadata(new MediaMetadata.Builder()
                         .setTitle(ch.getChannelName())
                         .setMediaUri(Uri.parse(ch.getChannelUrl()))

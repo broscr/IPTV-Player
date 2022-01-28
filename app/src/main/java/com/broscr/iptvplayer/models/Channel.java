@@ -3,8 +3,6 @@ package com.broscr.iptvplayer.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
 import io.realm.RealmObject;
 
 public class Channel extends RealmObject implements Parcelable {
@@ -13,6 +11,8 @@ public class Channel extends RealmObject implements Parcelable {
     private String channelUrl;
     private String channelImg;
     private String channelGroup;
+    private String channelDrmKey;
+    private String channelDrmType;
 
     public Channel() {
     }
@@ -49,24 +49,43 @@ public class Channel extends RealmObject implements Parcelable {
         this.channelGroup = channelGroup;
     }
 
-    @NonNull
+    public String getChannelDrmKey() {
+        return channelDrmKey;
+    }
+
+    public void setChannelDrmKey(String channelDrmKey) {
+        this.channelDrmKey = channelDrmKey;
+    }
+
+    public String getChannelDrmType() {
+        return channelDrmType;
+    }
+
+    public void setChannelDrmType(String channelDrmType) {
+        this.channelDrmType = channelDrmType;
+    }
+
     @Override
     public String toString() {
         return "Channel{" +
-                ", channelName='" + channelName + '\'' +
+                "channelName='" + channelName + '\'' +
                 ", channelUrl='" + channelUrl + '\'' +
                 ", channelImg='" + channelImg + '\'' +
                 ", channelGroup='" + channelGroup + '\'' +
+                ", channelDrmKey='" + channelDrmKey + '\'' +
+                ", channelDrmType='" + channelDrmType + '\'' +
                 '}';
     }
 
     public Channel(Parcel in) {
-        String[] data = new String[4];
+        String[] data = new String[6];
         in.readStringArray(data);
         this.channelName = data[0];
         this.channelUrl = data[1];
         this.channelImg = data[2];
         this.channelGroup = data[3];
+        this.channelDrmKey = data[4];
+        this.channelDrmType = data[5];
     }
 
     @Override
@@ -76,7 +95,8 @@ public class Channel extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStringArray(new String[]{this.channelName, this.channelUrl, this.channelImg, this.channelGroup});
+        parcel.writeStringArray(new String[]{this.channelName, this.channelUrl, this.channelImg,
+                this.channelGroup, this.channelDrmKey, this.channelDrmType});
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator<Channel>() {

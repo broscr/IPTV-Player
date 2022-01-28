@@ -56,6 +56,8 @@ public class IPTvRealm {
             channel.setChannelImg(chl.getChannelImg());
             channel.setChannelUrl(chl.getChannelUrl());
             channel.setChannelGroup(chl.getChannelGroup());
+            channel.setChannelDrmKey(chl.getChannelDrmKey());
+            channel.setChannelDrmType(chl.getChannelDrmType());
         }
         realm.commitTransaction();
         return true;
@@ -124,6 +126,8 @@ public class IPTvRealm {
         channel.setChannelImg(chl.getChannelImg());
         channel.setChannelUrl(chl.getChannelUrl());
         channel.setChannelGroup(chl.getChannelGroup());
+        channel.setChannelDrmKey(chl.getChannelDrmKey());
+        channel.setChannelDrmType(chl.getChannelDrmType());
         realm.commitTransaction();
         return true;
     }

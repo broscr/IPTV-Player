@@ -9,7 +9,7 @@
 
 [Test APK](https://github.com/broscr/IPTV-Player/blob/master/app/release/)
 
-## Supported file format
+## Supported file format (DRM-or-Default)
 
 >#EXTM3U\
 >#EXTINF:-1 tvg-id="" tvg-name="===((  TR SPOR  ))===" tvg-logo="" group-title="TR SPOR",===((  TR SPOR  ))===\
@@ -30,6 +30,25 @@
 >http://server_url/username/password/37735\
 >#EXTINF:-1 tvg-id="" tvg-name="TR: CHANNEL NAME" tvg-logo="" group-title="TR  YEREL",TR: CHANNEL NAME\
 >http://server_url/username/password/37731\
+-----------------------------------------------OR------------------------------------------------------------------------
+>#EXTM3U
+>#KODIPROP:inputstream.adaptive.license_type=com.widevine.alpha
+>#KODIPROP:inputstream.adaptive.license_key=https://proxy.uat.widevine.com/proxy?provider=widevine_test
+>#EXTINF:-1 tvg-logo="https://aaa.-400.png" group-title="TestGroup",AAAA SPORTS
+>https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd
+>#KODIPROP:inputstream.adaptive.license_type=com.widevine.alpha
+>#KODIPROP:inputstream.adaptive.license_key=https://proxy.uat.widevine.com/proxy?provider=widevine_test
+>#EXTINF:-1 tvg-logo="https://bbb.--400.png" group-title="TestGroup",BBBB SPORTS
+>https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd
+>#KODIPROP:inputstream.adaptive.license_type=com.widevine.alpha
+>#KODIPROP:inputstream.adaptive.license_key=https://proxy.uat.widevine.com/proxy?provider=widevine_test
+>#EXTINF:-1 tvg-logo="https://ccc.-400.png" group-title="TestGroup",CCC SPORTS
+>https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd
+>#KODIPROP:inputstream.adaptive.license_type=com.widevine.alpha
+>#KODIPROP:inputstream.adaptive.license_key=https://proxy.uat.widevine.com/proxy?provider=widevine_test
+>#EXTINF:-1 tvg-logo="https://ccc.-400.png" group-title="TestGroup",DDD SPORTS
+>https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd
+
 
 ## Road Map....
 * ~~Categories system.~~ :thumbsup:

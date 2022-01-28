@@ -20,16 +20,15 @@ import java.util.List;
 import timber.log.Timber;
 
 public class FileReader {
-    private final String EXT_M3U = "#EXTM3U";
     private final String EXT_INF_SP = "#EXTINF:-1";
+    private final String KOD_IP_DROP_TYPE = "#KODIPROP:inputstream.adaptive.license_type=";
+    private final String KOD_IP_DROP_KEY = "#KODIPROP:inputstream.adaptive.license_key=";
     private final String TVG_NAME = "tvg-name=";
     private final String TVG_LOGO = "tvg-logo=";
     private final String GROUP_TITLE = "group-title=";
-    private final String WHITE_SPACE = " ";
     private final String COMMA = ",";
     private final String HTTP = "http://";
     private final String HTTPS = "https://";
-    private final String TV_NAME = "TV_NAME";
     private final Uri fileName;
     private final List<Channel> channelList;
     private final Activity activity;
@@ -46,48 +45,42 @@ public class FileReader {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamReader));
 
             String currentLine;
-            StringBuilder allText = new StringBuilder();
-            while ((currentLine = bufferedReader.readLine()) != null) {
-                allText.append(currentLine).append("\n");
-            }
 
-            fileSplitter(allText.toString());
+            Channel channel = new Channel();
+            while ((currentLine = bufferedReader.readLine()) != null) {
+                currentLine = currentLine.replaceAll("\"", "");
+                if (currentLine.startsWith(KOD_IP_DROP_TYPE)) {
+                    channel.setChannelDrmType(currentLine.split(KOD_IP_DROP_TYPE)[1].trim());
+                    continue;
+                }
+
+                if (currentLine.startsWith(KOD_IP_DROP_KEY)) {
+                    channel.setChannelDrmKey(currentLine.split(KOD_IP_DROP_KEY)[1].trim());
+                    continue;
+                }
+
+                if (currentLine.startsWith(EXT_INF_SP)) {
+                    channel.setChannelName(currentLine.split(TVG_NAME).length > 1 ?
+                            currentLine.split(TVG_NAME)[1].split(TVG_LOGO)[0] :
+                            currentLine.split(COMMA)[1]);
+                    channel.setChannelGroup(currentLine.split(GROUP_TITLE)[1].split(COMMA)[0]);
+                    channel.setChannelImg(currentLine.split(TVG_LOGO).length > 1 ?
+                            currentLine.split(TVG_LOGO)[1].split(GROUP_TITLE)[0] : "");
+                    continue;
+                }
+
+                if (currentLine.startsWith(HTTP) || currentLine.startsWith(HTTPS)) {
+                    channel.setChannelUrl(currentLine);
+                    channelList.add(channel);
+                    channel = new Channel();
+                }
+
+            }
 
         } catch (IOException e) {
             Timber.e(e);
             Helper.showToast(activity, e.getLocalizedMessage());
-        }
-    }
-
-    private void fileSplitter(String fileText) {
-
-        String[] fileLines = fileText.replaceAll("\n", " ").split(EXT_M3U)[1].split(EXT_INF_SP);
-
-        try {
-            for (String line : fileLines) {
-                if (!line.equals(WHITE_SPACE)) {
-
-                    String tvgName = line.split(TVG_NAME)[1].split(TVG_LOGO)[0];
-                    String tvgLogo = line.split(TVG_LOGO)[1].split(GROUP_TITLE)[0];
-                    String groupTitle = line.split(GROUP_TITLE)[1].split(COMMA)[0];
-
-                    if (line.split(COMMA)[1].split(HTTP).length > 1) {
-                        String url = line.split(COMMA)[1].split(HTTP)[1];
-
-                        if (!tvgName.contains("===")) {
-                            channelList.add(setChannel(tvgName, groupTitle, tvgLogo, url, channelList.size()));
-                        }
-                    } else if (line.split(COMMA)[1].split(HTTPS).length > 1) {
-                        String url = line.split(COMMA)[1].split(HTTPS)[1];
-
-                        if (!tvgName.contains("===")) {
-                            channelList.add(setChannel(tvgName, groupTitle, tvgLogo, url, channelList.size()));
-                        }
-                    }
-
-                }
-            }
-
+        } finally {
             if (channelList.size() > 0) {
 
                 if (new IPTvRealm().channelListSave(channelList)) {
@@ -102,20 +95,6 @@ public class FileReader {
             } else {
                 Helper.showToast(activity, activity.getString(R.string.error_file_read_exp));
             }
-
-        } catch (Exception e) {
-            Timber.e(e);
-            Helper.showToast(activity, String.format(e.getMessage() != null ?
-                    e.getMessage() : e.toString(), activity.getString(R.string.error_file_read)));
         }
-    }
-
-    private Channel setChannel(String tvgName, String groupTitle, String tvgLogo, String url, int listSize) {
-        Channel channel = new Channel();
-        channel.setChannelName(!tvgName.trim().equals("") ? tvgName.replaceAll("\"", "") : TV_NAME + listSize);
-        channel.setChannelGroup(groupTitle.replaceAll("\"", ""));
-        channel.setChannelImg(tvgLogo.replaceAll("\"", ""));
-        channel.setChannelUrl((HTTPS + url).replaceAll("\"", ""));
-        return channel;
     }
 }
