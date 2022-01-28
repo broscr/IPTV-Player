@@ -28,6 +28,8 @@ public class FileReader {
     private final String WHITE_SPACE = " ";
     private final String COMMA = ",";
     private final String HTTP = "http://";
+    private final String HTTPS = "https://";
+    private final String TV_NAME = "TV_NAME";
     private final Uri fileName;
     private final List<Channel> channelList;
     private final Activity activity;
@@ -73,13 +75,13 @@ public class FileReader {
                         String url = line.split(COMMA)[1].split(HTTP)[1];
 
                         if (!tvgName.contains("===")) {
+                            channelList.add(setChannel(tvgName, groupTitle, tvgLogo, url, channelList.size()));
+                        }
+                    } else if (line.split(COMMA)[1].split(HTTPS).length > 1) {
+                        String url = line.split(COMMA)[1].split(HTTPS)[1];
 
-                            Channel channel = new Channel();
-                            channel.setChannelName(tvgName.replaceAll("\"", ""));
-                            channel.setChannelGroup(groupTitle.replaceAll("\"", ""));
-                            channel.setChannelImg(tvgLogo.replaceAll("\"", ""));
-                            channel.setChannelUrl((HTTP + url).replaceAll("\"", ""));
-                            channelList.add(channel);
+                        if (!tvgName.contains("===")) {
+                            channelList.add(setChannel(tvgName, groupTitle, tvgLogo, url, channelList.size()));
                         }
                     }
 
@@ -106,5 +108,14 @@ public class FileReader {
             Helper.showToast(activity, String.format(e.getMessage() != null ?
                     e.getMessage() : e.toString(), activity.getString(R.string.error_file_read)));
         }
+    }
+
+    private Channel setChannel(String tvgName, String groupTitle, String tvgLogo, String url, int listSize) {
+        Channel channel = new Channel();
+        channel.setChannelName(!tvgName.trim().equals("") ? tvgName.replaceAll("\"", "") : TV_NAME + listSize);
+        channel.setChannelGroup(groupTitle.replaceAll("\"", ""));
+        channel.setChannelImg(tvgLogo.replaceAll("\"", ""));
+        channel.setChannelUrl((HTTPS + url).replaceAll("\"", ""));
+        return channel;
     }
 }
