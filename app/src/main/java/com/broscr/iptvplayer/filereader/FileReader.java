@@ -20,7 +20,7 @@ import java.util.List;
 import timber.log.Timber;
 
 public class FileReader {
-    private final String EXT_INF_SP = "#EXTINF:-1";
+    private final String EXT_INF_SP = "#EXTINF:";
     private final String KOD_IP_DROP_TYPE = "#KODIPROP:inputstream.adaptive.license_type=";
     private final String KOD_IP_DROP_KEY = "#KODIPROP:inputstream.adaptive.license_key=";
     private final String TVG_NAME = "tvg-name=";
