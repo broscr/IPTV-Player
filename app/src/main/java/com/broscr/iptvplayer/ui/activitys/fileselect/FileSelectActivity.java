@@ -2,6 +2,7 @@ package com.broscr.iptvplayer.ui.activitys.fileselect;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -65,6 +66,12 @@ public class FileSelectActivity extends AppCompatActivity implements EasyPermiss
 
 
     private boolean hasReadFilePermission() {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+            return EasyPermissions.hasPermissions(
+                    FileSelectActivity.this,
+                    Manifest.permission.READ_MEDIA_AUDIO)
+                    ;
+        }
         return EasyPermissions.hasPermissions(FileSelectActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
@@ -74,11 +81,21 @@ public class FileSelectActivity extends AppCompatActivity implements EasyPermiss
             //File read permission success
             selectFileLauncher.launch(Helper.FILE_MIME_TYPE);
         } else {
-            EasyPermissions.requestPermissions(
-                    FileSelectActivity.this,
-                    getString(R.string.rationale_read_file),
-                    IPTV_READ_DOC_PERM,
-                    Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+                EasyPermissions.requestPermissions(
+                        FileSelectActivity.this,
+                        getString(R.string.rationale_read_file),
+                        IPTV_READ_DOC_PERM,
+                        Manifest.permission.READ_MEDIA_AUDIO)
+                ;
+            } else {
+                EasyPermissions.requestPermissions(
+                        FileSelectActivity.this,
+                        getString(R.string.rationale_read_file),
+                        IPTV_READ_DOC_PERM,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                ;
+            }
         }
     }
 
@@ -93,6 +110,7 @@ public class FileSelectActivity extends AppCompatActivity implements EasyPermiss
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Timber.e("");
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
 
             Timber.e(getString(R.string.returned_from_app_settings_to_activity,
