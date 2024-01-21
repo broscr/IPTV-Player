@@ -66,13 +66,13 @@ public class FileSelectActivity extends AppCompatActivity implements EasyPermiss
 
 
     private boolean hasReadFilePermission() {
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return EasyPermissions.hasPermissions(
                     FileSelectActivity.this,
                     Manifest.permission.READ_MEDIA_AUDIO)
                     ;
-        }
-        return EasyPermissions.hasPermissions(FileSelectActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        } else
+            return EasyPermissions.hasPermissions(FileSelectActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
 
     @AfterPermissionGranted(IPTV_READ_DOC_PERM)
@@ -81,7 +81,7 @@ public class FileSelectActivity extends AppCompatActivity implements EasyPermiss
             //File read permission success
             selectFileLauncher.launch(Helper.FILE_MIME_TYPE);
         } else {
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 EasyPermissions.requestPermissions(
                         FileSelectActivity.this,
                         getString(R.string.rationale_read_file),
