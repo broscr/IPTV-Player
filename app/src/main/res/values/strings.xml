@@ -31,5 +31,6 @@
     <string name="pause">pause</string>
     <string name="previous">previous</string>
     <string name="next">next</string>
+    <string name="delete_all">Delete All File</string>
     <!--ERRORS-->
 </resources>
