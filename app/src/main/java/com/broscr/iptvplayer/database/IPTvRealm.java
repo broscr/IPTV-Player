@@ -148,5 +148,13 @@ public class IPTvRealm {
         realm.commitTransaction();
         return channel;
     }
+
+    public boolean deleteAllList() {
+        realm = ipTvListInstanceRealm();
+        realm.beginTransaction();
+        realm.deleteAll();
+        realm.commitTransaction();
+        return true;
+    }
 }
 
