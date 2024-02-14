@@ -29,6 +29,7 @@ public class FileReader {
     private final String COMMA = ",";
     private final String HTTP = "http://";
     private final String HTTPS = "https://";
+    private final String WHITE_SPACE = " ";
     private final Uri fileName;
     private final List<Channel> channelList;
     private final Activity activity;
@@ -63,9 +64,9 @@ public class FileReader {
                     channel.setChannelName(currentLine.split(TVG_NAME).length > 1 ?
                             currentLine.split(TVG_NAME)[1].split(TVG_LOGO)[0] :
                             currentLine.split(COMMA)[1]);
-                    channel.setChannelGroup(currentLine.split(GROUP_TITLE)[1].split(COMMA)[0]);
+                    channel.setChannelGroup(currentLine.split(GROUP_TITLE)[1].split(COMMA)[0].split(WHITE_SPACE)[0]);
                     channel.setChannelImg(currentLine.split(TVG_LOGO).length > 1 ?
-                            currentLine.split(TVG_LOGO)[1].split(GROUP_TITLE)[0] : "");
+                            currentLine.split(TVG_LOGO)[1].split(GROUP_TITLE)[0].split(COMMA)[0] : "");
                     continue;
                 }
 

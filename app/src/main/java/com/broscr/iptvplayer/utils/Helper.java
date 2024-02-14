@@ -17,6 +17,9 @@ public class Helper {
     public static final String FILE_MIME_TYPE = "audio/x-mpegurl";
     public static final String CATEGORY = "category";
     public static final String CHANNEL = "channel";
+    public static final String CLEAR_KEY = "clearkey";
+    public static final String PLAYER_READY = "playready";
+    public static final String WIDE_WINE = "widevine";
     public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36";
 
     public static void showToast(Context context, String message) {
@@ -30,5 +33,12 @@ public class Helper {
         activity.getSupportActionBar().setTitle(title);
         final Drawable upArrow = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_back, null);
         activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
+    }
+
+    public static String detectDashType(String drmKey) {
+        if (drmKey.contains(CLEAR_KEY)) return CLEAR_KEY;
+        else if (drmKey.contains(WIDE_WINE)) return WIDE_WINE;
+        else if (drmKey.contains(PLAYER_READY)) return PLAYER_READY;
+        else return "";
     }
 }

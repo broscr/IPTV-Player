@@ -33,6 +33,7 @@ import com.google.android.exoplayer2.util.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener, Player.Listener {
@@ -243,11 +244,17 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private MediaItem setMediaItem(Channel ch) {
+        MediaItem.DrmConfiguration.Builder drmConfig = null;
+
+        if (!Objects.equals(ch.getChannelDrmKey(), "")) {
+            drmConfig = new MediaItem.DrmConfiguration.Builder(Objects.requireNonNull(Util.getDrmUuid(Helper.detectDashType(ch.getChannelDrmType()))));
+            drmConfig.setLicenseUri(ch.getChannelDrmKey());
+        }
+
         return new MediaItem.Builder()
                 .setUri(ch.getChannelUrl())
                 .setTag(ch.getChannelName())
-                .setDrmLicenseUri(ch.getChannelDrmKey())
-                .setDrmUuid(Util.getDrmUuid(C.WIDEVINE_UUID.toString()))
+                .setDrmConfiguration(drmConfig != null ? drmConfig.build() : null)
                 .setMediaMetadata(new MediaMetadata.Builder()
                         .setTitle(ch.getChannelName())
                         .setMediaUri(Uri.parse(ch.getChannelUrl()))
