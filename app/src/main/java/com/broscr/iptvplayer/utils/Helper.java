@@ -36,9 +36,11 @@ public class Helper {
     }
 
     public static String detectDashType(String drmKey) {
-        if (drmKey.contains(CLEAR_KEY)) return CLEAR_KEY;
-        else if (drmKey.contains(WIDE_WINE)) return WIDE_WINE;
-        else if (drmKey.contains(PLAYER_READY)) return PLAYER_READY;
-        else return "";
+        if (drmKey != null) {
+            if (drmKey.contains(CLEAR_KEY)) return CLEAR_KEY;
+            else if (drmKey.contains(WIDE_WINE)) return WIDE_WINE;
+            else if (drmKey.contains(PLAYER_READY)) return PLAYER_READY;
+        }
+        return "";
     }
 }
