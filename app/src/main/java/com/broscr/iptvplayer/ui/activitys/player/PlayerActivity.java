@@ -246,7 +246,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private MediaItem setMediaItem(Channel ch) {
         MediaItem.DrmConfiguration.Builder drmConfig = null;
 
-        if (!Objects.equals(ch.getChannelDrmKey(), "")) {
+        if (!Objects.isNull(ch) && !Objects.isNull(ch.getChannelDrmKey())) {
             drmConfig = new MediaItem.DrmConfiguration.Builder(Objects.requireNonNull(Util.getDrmUuid(Helper.detectDashType(ch.getChannelDrmType()))));
             drmConfig.setLicenseUri(ch.getChannelDrmKey());
         }
